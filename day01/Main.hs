@@ -7,10 +7,11 @@ parseElves :: String -> [Int]
 parseElves = map (sum . map read) . splitOn "" . lines
 
 max3Sum :: (Num a, Ord a) => a -> a -> a -> [a] -> a
-max3Sum a b _ (x : xs) | x > a = max3Sum x a b xs
-max3Sum a b _ (x : xs) | x > b = max3Sum a x b xs
-max3Sum a b c (x : xs) | x > c = max3Sum a b x xs
-max3Sum a b c (_ : xs) = max3Sum a b c xs
+max3Sum a b c (x : xs)
+  | x > a = max3Sum x a b xs
+  | x > b = max3Sum a x b xs
+  | x > c = max3Sum a b x xs
+  | otherwise = max3Sum a b c xs
 max3Sum a b c _ = a + b + c
 
 part1 :: String -> IO ()
