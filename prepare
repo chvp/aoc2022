@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ghc -O2 -o run day$1/*.hs src/*.hs
