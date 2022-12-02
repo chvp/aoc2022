@@ -34,9 +34,7 @@ forLoss Paper = Rock
 forLoss Scissors = Paper
 
 forWin :: RPS -> RPS
-forWin Rock = Paper
-forWin Paper = Scissors
-forWin Scissors = Rock
+forWin = forLoss . forLoss
 
 value :: RPS -> Int
 value Rock = 1
@@ -50,9 +48,9 @@ playRound1 (x, y)
   | otherwise = value y
 
 playRound2 :: (RPS, Result) -> Int
-playRound2 (x, Draw) = value x + 3
-playRound2 (x, Win) = value (forWin x) + 6
-playRound2 (x, Lose) = value (forLoss x)
+playRound2 (x, Draw) = playRound1 (x, x)
+playRound2 (x, Win) = playRound1 (x, forWin x)
+playRound2 (x, Lose) = playRound1 (x, forLoss x)
 
 part1 :: String -> IO ()
 part1 filename = do
