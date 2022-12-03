@@ -1,5 +1,6 @@
 module Main (main) where
 
+import Control.Monad ((<=<))
 import Lib (splitOn)
 import System.Environment (getArgs, getExecutablePath)
 
@@ -15,14 +16,10 @@ max3Sum a b c (x : xs)
 max3Sum a b c _ = a + b + c
 
 part1 :: String -> IO ()
-part1 filename = do
-  elves <- parseElves <$> readFile filename
-  print $ maximum elves
+part1 = print . maximum . parseElves <=< readFile
 
 part2 :: String -> IO ()
-part2 filename = do
-  elves <- parseElves <$> readFile filename
-  print $ max3Sum 0 0 0 elves
+part2 = print . max3Sum 0 0 0 . parseElves <=< readFile
 
 _main :: [String] -> IO ()
 _main [_, "1", fn] = part1 fn

@@ -1,5 +1,6 @@
 module Main (main) where
 
+import Control.Monad ((<=<))
 import System.Environment (getArgs, getExecutablePath)
 
 data RPS = Rock | Paper | Scissors deriving (Eq)
@@ -25,8 +26,8 @@ parseRound :: (Read a) => [String] -> (RPS, a)
 parseRound [x, y] = (read x, read y)
 parseRound _ = error "invalid input"
 
-parseRounds :: (Read a) => String -> [(RPS, a)]
-parseRounds = map (parseRound . words) . lines
+parseRounds :: (Read a) => [String] -> [(RPS, a)]
+parseRounds = map $ parseRound . words
 
 forLoss :: RPS -> RPS
 forLoss Rock = Scissors
@@ -53,14 +54,10 @@ playRound2 (x, Win) = playRound1 (x, forWin x)
 playRound2 (x, Lose) = playRound1 (x, forLoss x)
 
 part1 :: String -> IO ()
-part1 filename = do
-  rounds <- parseRounds <$> readFile filename
-  print $ (sum . map playRound1) rounds
+part1 = print . sum . map playRound1 . parseRounds . lines <=< readFile
 
 part2 :: String -> IO ()
-part2 filename = do
-  rounds <- parseRounds <$> readFile filename
-  print $ (sum . map playRound2) rounds
+part2 = print . sum . map playRound2 . parseRounds . lines <=< readFile
 
 _main :: [String] -> IO ()
 _main [_, "1", fn] = part1 fn
