@@ -1,6 +1,8 @@
 module Main (main) where
 
+import Control.Monad ((<=<))
 import Data.Char (isUpper, ord)
+import Data.IntSet (IntSet)
 import qualified Data.IntSet as IntSet
 import System.Environment (getArgs, getExecutablePath)
 
@@ -9,28 +11,25 @@ value c
   | isUpper c = ord c - ord 'A' + 27
   | otherwise = ord c - ord 'a' + 1
 
-commonElement :: String -> Int
-commonElement s = IntSet.findMin $ IntSet.intersection (IntSet.fromList (take len items)) (IntSet.fromList (drop len items))
-  where
-    items = map value s
-    len = length items `div` 2
+stringToSet :: String -> IntSet
+stringToSet = IntSet.fromList . map value
 
-commonBadgeSum :: [String] -> Int
-commonBadgeSum (x : y : z : xs) = IntSet.findMin (intersect3 (toSet x) (toSet y) (toSet z)) + commonBadgeSum xs
+commonElement :: String -> Int
+commonElement s = IntSet.findMin $ IntSet.intersection (stringToSet s1) (stringToSet s2)
   where
-    toSet s = IntSet.fromList $ map value s
-    intersect3 s1 s2 s3 = IntSet.intersection s1 $ IntSet.intersection s2 s3
+    (s1, s2) = splitAt (length s `div` 2) s
+
+commonBadgeSum :: [IntSet] -> Int
+commonBadgeSum (x : y : z : xs) = intersection + commonBadgeSum xs
+  where
+    intersection = IntSet.findMin $ IntSet.intersection x $ IntSet.intersection y z
 commonBadgeSum _ = 0
 
 part1 :: String -> IO ()
-part1 filename = do
-  elements <- map commonElement . lines <$> readFile filename
-  print $ sum elements
+part1 = print . sum . map commonElement . lines <=< readFile
 
 part2 :: String -> IO ()
-part2 filename = do
-  bags <- lines <$> readFile filename
-  print $ commonBadgeSum bags
+part2 = print . commonBadgeSum . map stringToSet . lines <=< readFile
 
 _main :: [String] -> IO ()
 _main [_, "1", fn] = part1 fn
