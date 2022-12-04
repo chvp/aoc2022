@@ -61,3 +61,10 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - containers
+  day04:
+    main:                Main.hs
+    source-dirs:         day04
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
