@@ -1,41 +1,41 @@
 module Main (main) where
 
 import Control.Monad ((<=<))
-import Data.Char (isDigit)
+import Lib (readIntP)
 import System.Environment (getArgs, getExecutablePath)
-import Text.ParserCombinators.ReadP (ReadP, char, eof, many1, readP_to_S, satisfy)
+import Text.ParserCombinators.ReadP (ReadP, char, endBy, eof, readP_to_S)
 
-readIntP :: ReadP Int
-readIntP = read <$> many1 (satisfy isDigit)
+type Range = (Int, Int)
 
-readRangeP :: ReadP (Int, Int)
+type RangePair = (Range, Range)
+
+readRangeP :: ReadP Range
 readRangeP = do
   n1 <- readIntP
   _ <- char '-'
   n2 <- readIntP
   return (n1, n2)
 
-readRangePairP :: ReadP ((Int, Int), (Int, Int))
+readRangePairP :: ReadP RangePair
 readRangePairP = do
   p1 <- readRangeP
   _ <- char ','
   p2 <- readRangeP
-  eof
   return (p1, p2)
 
-parseRangePair :: String -> ((Int, Int), (Int, Int))
-parseRangePair = fst . head . readP_to_S readRangePairP
+readRangePairsP :: ReadP [RangePair]
+readRangePairsP = readRangePairP `endBy` char '\n'
 
-parseRangePairs :: String -> [((Int, Int), (Int, Int))]
-parseRangePairs = map parseRangePair . lines
+parseRangePairs :: String -> [RangePair]
+parseRangePairs = fst . head . readP_to_S (readRangePairsP <* eof)
 
-isContainedIn :: (Int, Int) -> (Int, Int) -> Bool
+isContainedIn :: Range -> Range -> Bool
 isContainedIn (x1, x2) (y1, y2) = x1 <= y1 && x2 >= y2
 
-undirectedContains :: ((Int, Int), (Int, Int)) -> Bool
+undirectedContains :: RangePair -> Bool
 undirectedContains (p1, p2) = isContainedIn p1 p2 || isContainedIn p2 p1
 
-overlap :: ((Int, Int), (Int, Int)) -> Bool
+overlap :: RangePair -> Bool
 overlap ((x1, x2), (y1, y2)) = not (y1 > x2 || y2 < x1)
 
 part1 :: String -> IO ()
