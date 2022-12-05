@@ -46,29 +46,20 @@ readInputP = do
 parseInput :: String -> (Seq [Char], [Move])
 parseInput = fst . head . readP_to_S (readInputP <* eof)
 
-doMove :: Seq [Char] -> Move -> Seq [Char]
-doMove state Move {amount = am, from = f, to = t} = state''
+doMove :: ([Char] -> [Char]) -> Seq [Char] -> Move -> Seq [Char]
+doMove op state Move {amount = am, from = f, to = t} = state''
   where
     state' = update f (drop am $ index state f) state
-    state'' = update t (reverse (take am (index state f)) ++ index state t) state'
+    state'' = update t (op (take am (index state f)) ++ index state t) state'
 
-doMove' :: Seq [Char] -> Move -> Seq [Char]
-doMove' state Move {amount = am, from = f, to = t} = state''
-  where
-    state' = update f (drop am $ index state f) state
-    state'' = update t (take am (index state f) ++ index state t) state'
-
-doMoves :: (Seq [Char], [Move]) -> Seq [Char]
-doMoves (state, moves) = foldl doMove state moves
-
-doMoves' :: (Seq [Char], [Move]) -> Seq [Char]
-doMoves' (state, moves) = foldl doMove' state moves
+doMoves :: ([Char] -> [Char]) -> (Seq [Char], [Move]) -> Seq [Char]
+doMoves op (state, moves) = foldl (doMove op) state moves
 
 part1 :: String -> IO ()
-part1 = print . map head . toList . doMoves . parseInput <=< readFile
+part1 = putStrLn . map head . toList . doMoves reverse . parseInput <=< readFile
 
 part2 :: String -> IO ()
-part2 = print . map head . toList . doMoves' . parseInput <=< readFile
+part2 = putStrLn . map head . toList . doMoves id . parseInput <=< readFile
 
 _main :: [String] -> IO ()
 _main [_, "1", fn] = part1 fn
