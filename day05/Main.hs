@@ -4,12 +4,12 @@ import Control.Monad ((<=<))
 import Data.Foldable (toList)
 import Data.List (transpose)
 import Data.Maybe (catMaybes)
-import Data.Sequence (fromList, index, update, Seq)
+import Data.Sequence (Seq, fromList, index, update)
 import Lib (readIntP)
 import System.Environment (getArgs, getExecutablePath)
 import Text.ParserCombinators.ReadP (ReadP, char, count, endBy, eof, get, many, readP_to_S, satisfy, sepBy, string)
 
-data Move = Move { amount :: Int, from :: Int, to :: Int } deriving Show
+data Move = Move {amount :: Int, from :: Int, to :: Int} deriving (Show)
 
 readMoveP :: ReadP Move
 readMoveP = do
@@ -20,7 +20,7 @@ readMoveP = do
   _ <- string " to "
   t <- readIntP
   -- Subtract 1 from "from" and "to", to have normal indices
-  return $ Move { amount = am, from = f - 1, to = t - 1 }
+  return $ Move {amount = am, from = f - 1, to = t - 1}
 
 readContainerP :: ReadP (Maybe Char)
 readContainerP = do
@@ -47,16 +47,16 @@ parseInput :: String -> (Seq [Char], [Move])
 parseInput = fst . head . readP_to_S (readInputP <* eof)
 
 doMove :: Seq [Char] -> Move -> Seq [Char]
-doMove state Move { amount = am, from = f, to = t } = state''
+doMove state Move {amount = am, from = f, to = t} = state''
   where
     state' = update f (drop am $ index state f) state
-    state'' = update t (reverse (take am (index state f)) ++ (index state t)) state'
+    state'' = update t (reverse (take am (index state f)) ++ index state t) state'
 
 doMove' :: Seq [Char] -> Move -> Seq [Char]
-doMove' state Move { amount = am, from = f, to = t } = state''
+doMove' state Move {amount = am, from = f, to = t} = state''
   where
     state' = update f (drop am $ index state f) state
-    state'' = update t (take am (index state f) ++ (index state t)) state'
+    state'' = update t (take am (index state f) ++ index state t) state'
 
 doMoves :: (Seq [Char], [Move]) -> Seq [Char]
 doMoves (state, moves) = foldl doMove state moves
