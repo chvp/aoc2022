@@ -70,3 +70,13 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - aoc2022
+  day05:
+    main:                Main.hs
+    source-dirs:         day05
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - aoc2022
+    - containers
