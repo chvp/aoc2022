@@ -93,3 +93,15 @@ executable day05
     , base >=4.7 && <5
     , containers
   default-language: Haskell2010
+
+executable day06
+  main-is: Main.hs
+  other-modules:
+      Paths_aoc2022
+  hs-source-dirs:
+      day06
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+  default-language: Haskell2010
