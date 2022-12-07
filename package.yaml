@@ -89,3 +89,12 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - containers
+  day07:
+    main:                Main.hs
+    source-dirs:         day07
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - aoc2022
