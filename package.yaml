@@ -20,6 +20,7 @@ description:         Please see the README on GitHub at <https://github.com/chvp
 
 dependencies:
 - base >= 4.7 && < 5
+- containers
 
 ghc-options:
 - -Wall
@@ -52,6 +53,8 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    dependencies:
+    - aoc2022
   day03:
     main:                Main.hs
     source-dirs:         day03
@@ -60,7 +63,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - containers
+    - aoc2022
   day04:
     main:                Main.hs
     source-dirs:         day04
@@ -79,7 +82,6 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - aoc2022
-    - containers
   day06:
     main:                Main.hs
     source-dirs:         day06
@@ -88,7 +90,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - containers
+    - aoc2022
   day07:
     main:                Main.hs
     source-dirs:         day07
@@ -107,7 +109,6 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - aoc2022
-    - containers
   day09:
     main:                Main.hs
     source-dirs:         day09
@@ -117,4 +118,21 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - aoc2022
-    - containers
+  day10:
+    main:                Main.hs
+    source-dirs:         day10
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - aoc2022
+  day11:
+    main:                Main.hs
+    source-dirs:         day11
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - aoc2022
