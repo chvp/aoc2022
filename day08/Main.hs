@@ -11,19 +11,11 @@ readGrid :: [[Char]] -> Seq (Seq Int)
 readGrid = fromList . map (fromList . map digitToInt)
 
 trace :: Seq (Seq Int) -> Seq (Seq Bool) -> (Int, Int) -> (Int, Int) -> Int -> Seq (Seq Bool)
-trace trees visibility (x, y) (xd, yd) h =
-  ( if notAtEnd
-      then
-        ( if higher
-            then trace trees updatedVisibility (x + xd, y + yd) (xd, yd) currentTree
-            else trace trees visibility (x + xd, y + yd) (xd, yd) h
-        )
-      else
-        ( if higher
-            then updatedVisibility
-            else visibility
-        )
-  )
+trace trees visibility (x, y) (xd, yd) h
+  | notAtEnd && higher = trace trees updatedVisibility (x + xd, y + yd) (xd, yd) currentTree
+  | notAtEnd = trace trees visibility (x + xd, y + yd) (xd, yd) h
+  | higher = updatedVisibility
+  | otherwise = visibility
   where
     notAtEnd = x + xd >= 0 && x + xd < Sequence.length (index trees y) && y + yd >= 0 && y + yd < Sequence.length trees
     currentTree = index (index trees y) x
