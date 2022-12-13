@@ -11,16 +11,9 @@ data Node = SimpleNode Int | ListNode [Node] deriving (Eq, Show)
 
 instance Ord Node where
   compare (SimpleNode n1) (SimpleNode n2) = compare n1 n2
-  compare (SimpleNode n1) other = compare (ListNode [SimpleNode n1]) other
-  compare other (SimpleNode n2) = compare other (ListNode [SimpleNode n2])
-  compare (ListNode (x : xs)) (ListNode (y : ys))
-    | headsOrder /= EQ = headsOrder
-    | otherwise = compare (ListNode xs) (ListNode ys)
-    where
-      headsOrder = compare x y
-  compare (ListNode []) (ListNode []) = EQ
-  compare (ListNode []) _ = LT
-  compare _ (ListNode []) = GT
+  compare (ListNode l1) (ListNode l2) = compare l1 l2
+  compare n1 (ListNode l2) = compare [n1] l2
+  compare (ListNode l1) n2 = compare l1 [n2]
 
 readSimpleNodeP :: ReadP Node
 readSimpleNodeP = SimpleNode <$> readIntP
