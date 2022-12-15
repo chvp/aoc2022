@@ -163,3 +163,12 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - aoc2022
+  day15:
+    main:                Main.hs
+    source-dirs:         day15
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - aoc2022

@@ -1,8 +1,7 @@
 module Main (main) where
 
 import Control.Monad ((<=<))
-import Data.Foldable (toList)
-import Data.Sequence (Seq, elemIndexL, fromList, index, mapWithIndex, update, insertAt)
+import Data.Sequence (Seq, fromList, index, insertAt, update)
 import qualified Data.Sequence as Sequence
 import Lib (parseInput, readIntP)
 import System.Environment (getArgs, getExecutablePath)
